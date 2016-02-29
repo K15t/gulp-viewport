@@ -1,4 +1,12 @@
-
+// Example gulpfile.js:
+//
+// Configuration:
+//   TARGET -- the target to deploy to
+//
+// Tasks:
+//   upload -- full build & upload
+//   reset-theme -- remove all files from theme
+//   watch -- watch (to be used during development)
 
 var browserSync = require('browser-sync').create();
 var clone = require('clone');
@@ -17,7 +25,7 @@ var TARGET = 'DEV';
 var UPLOAD_OPTS = { sourceBase: 'assets' };
 
 
-gulp.task('default', ['fonts', 'img', 'js', 'less', 'templates']);
+gulp.task('upload', ['fonts', 'img', 'js', 'less', 'templates']);
 
 
 gulp.task('watch', function () {

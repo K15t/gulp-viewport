@@ -1,6 +1,6 @@
 {
   "name": "gulp-viewport",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The Gulp plugin for Scroll Viewport uploads theme resources directly into Scroll Viewport.",
   "dependencies": {
     "clone": "^1.0.2",

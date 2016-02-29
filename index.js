@@ -111,7 +111,7 @@ function uploadFile(file, opts) {
         targetPath = options.targetPath;
     }
 
-    log('Uploading \'' + file.history[0] + '\' to \'' + targetPath + '\'.');
+    debug('Uploading \'' + file.history[0] + '\' to \'' + targetPath + '\'.');
 
     file.pipe(request({
         url: strformat(options.confluenceBaseUrl + UPDATE_REST_URL, options.themeId),
@@ -126,11 +126,11 @@ function uploadFile(file, opts) {
     }, function (error, response) {
         if (response.statusCode === 201) {
             options.success && options.success(file, response);
-            log('SUCCESS: \'' + JSON.parse(response.body).name + '\' successfully uploaded.');
+            log('File \'' + JSON.parse(response.body).name + '\' successfully uploaded.');
 
         } else {
             options.error && options.error(file, response);
-            log('ERROR:   Could not upload file to \'' + options.confluenceBaseUrl + '\':\n' +
+            log('Error while uploading file to \'' + options.confluenceBaseUrl + '\':\n' +
                 response.statusCode + ' - ' + response.statusMessage);
         }
     }));
