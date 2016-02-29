@@ -115,9 +115,15 @@ Checkout ``example/gulpfile.js`` for a full example gulpfiles.
   use ``viewport.resetTheme`` to remove all files and then upload all files
   from scratch.
 
+
 ## Resources & Further Reading
 
 The following resources have been used when creating the plugin:
 
 * A general starter on Gulp plugins: https://github.com/gulpjs/gulp/blob/master/docs/writing-a-plugin/guidelines.md
 * For the API of the file objects used here: https://github.com/wearefractal/vinyl
+
+
+## Licensing
+
+MIT
