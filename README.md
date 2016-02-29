@@ -6,7 +6,7 @@ This is useful, when developing a Scroll Viewport theme locally. In this case, a
 can watch the resources, automatically upload the resources to Scroll Viewport, and even have 
 for example BrowserSync to sync the browser.
 
-## Set-up
+## Get started
 
 Create a config file ``~/.viewportrc`` that contains a list of all themes you want to upload to.
 
@@ -110,7 +110,7 @@ Checkout ``example/gulpfile.js`` for a full example gulpfiles.
 * Scroll Viewport does have a bug with multiple parallel uploads 
   (https://k15t.jira.com/browse/VPRT-719). Please make sure to upgrade to Scroll
   Viewport 2.3.1.  
-* When using the ''gulp-watch'' file that are deleted or move locally, will
+* When using the ``gulp-watch`` file that are deleted or move locally, will
   not automatically be deleted or moved in Confluence. In order to reset a theme
   use ``viewport.resetTheme`` to remove all files and then upload all files
   from scratch.
