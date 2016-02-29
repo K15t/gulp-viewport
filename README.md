@@ -27,7 +27,7 @@ Then you can use the Gulp Viewport plugin in your gulp file.
 ### Upload all files in pipeline
 
 The gulp-viewport plugin provides a special destination, that uploads a files in the 
-pipeline to a target (that has been defined in the ~/.viewportrc file). 
+pipeline to a target (that has been defined in the ``~/.viewportrc`` file). 
 
     gulp.task('templates', function () {
         return gulp.src('assets/**/*.vm')
@@ -99,11 +99,21 @@ To set up gulp-watch and BrowserSync:
             .pipe(gulp.dest('build/js'));
     });
 
+    
+### Example gulpfile.js
 
-## Known Issues
+Checkout ``example/gulpfile.js`` for a full example gulpfiles.
 
-* Scroll Viewport does have a bug with multiple parallel uploads (https://k15t.jira.com/browse/VPRT-719).
-* 
+
+## Known Limitations
+
+* Scroll Viewport does have a bug with multiple parallel uploads 
+  (https://k15t.jira.com/browse/VPRT-719). Please make sure to upgrade to Scroll
+  Viewport 2.3.1.  
+* When using the ''gulp-watch'' file that are deleted or move locally, will
+  not automatically be deleted or moved in Confluence. In order to reset a theme
+  use ``viewport.resetTheme`` to remove all files and then upload all files
+  from scratch.
 
 ## Resources & Further Reading
 
