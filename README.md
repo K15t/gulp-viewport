@@ -8,20 +8,20 @@ for example BrowserSync to sync the browser.
 
 ## Get started
 
-Create a config file ``~/.viewportrc`` that contains a list of all themes you want to upload to.
+Create a config file ``~/.viewportrc`` that contains a list of all systems to which you want
+to upload theme.
 
     [DEV]
     confluenceBaseUrl=http://localhost:1990/confluence
-    viewportUrl=http://localhost:1990/confluence/en
     username=admin
     password=admin
-    # Theme "My Theme"
-    themeId=C0A8B21601532D65BE2C643B2E3FB880
     
-Each section in the file is represents a theme on a specific Confluence server, a so-called
-"target". In the example above there is one target called "DEV".                                                                    
+Each section in the file is represents a Confluence server, also called "target system". 
+In the example above there is one target system called "DEV".                                                                    
 
-Then you can use the Gulp Viewport plugin in your gulp file.
+Then you can use the Gulp Viewport plugin in your gulp file like the following:
+
+    var viewportTheme = new ViewportTheme('the-theme-name', 'DEV');
  
  
 ### Upload all files in pipeline
@@ -31,8 +31,8 @@ pipeline to a target (that has been defined in the ``~/.viewportrc`` file).
 
     gulp.task('templates', function () {
         return gulp.src('assets/**/*.vm')
-            .pipe(viewport.upload(TARGET, UPLOAD_OPTS))  // upload to viewport
-            .pipe(gulp.dest('build/templates'));         // also copy to local 'build' folder
+            .pipe(viewportTheme.upload())         // upload to viewport theme
+            .pipe(gulp.dest('build/templates'));  // also copy to local 'build' folder
     }
 
 
@@ -46,9 +46,8 @@ Here is how to do it.
             .pipe(gulpSourcemaps.init())
             .pipe(gulpLess())
             .pipe(minifyCss())
-            .pipe(viewport.upload(TARGET, {
-                targetPath: 'css/main.css',    // target destination of batched file
-                success: browserSync.reload    
+            .pipe(viewportTheme.upload(TARGET, {
+                targetPath: 'css/main.css'    // target destination of batched file    
             }))
             .pipe(gulp.dest('build/css'));
     });
@@ -63,24 +62,23 @@ To set up gulp-watch and BrowserSync:
     // Dependencies 
     var browserSync = require('browser-sync').create();
     [...]
-    var viewport = require('gulp-viewport');
+    var ViewportTheme = require('gulp-viewport');
 
     // The target system needs to match with a section in .viewportrc
     var TARGET = 'DEV';
     
-    // The default upload opts.
-    var UPLOAD_OPTS = { sourceBase: 'assets' };
+    var viewportTheme = new ViewportTheme('the-theme-name', TARGET, { sourceBase: 'assets' });
     
     gulp.task('watch', function () {
     
         // init browser sync.
         browserSync.init({
             open: false,
-            proxy: viewport.getViewportUrl('DEV')   // the target needs to define a viewportUrl
+            proxy: 'http://localhost:1990/confluence/vsn',   // the target needs to define a viewportUrl
         });
     
         // Override the UPLOAD_OPTS.
-        UPLOAD_OPTS = extend(DEFAULT_UPLOAD_OPTS, {
+        viewportTheme.extendUploadOpts({
             uploadOnlyUpdated: 'true',
             success: browserSync.reload
         });
@@ -93,10 +91,8 @@ To set up gulp-watch and BrowserSync:
 
 ### Delete all files from theme
 
-    gulp.task('js', function () {
-        return gulp.src('assets/js/**/*.*')
-            .pipe(viewport(defaultOpts))
-            .pipe(gulp.dest('build/js'));
+    gulp.task('reset-theme', function () {
+        viewportTheme.removeAllResources();
     });
 
     
@@ -107,13 +103,12 @@ Checkout ``example/gulpfile.js`` for a full example gulpfiles.
 
 ## Known Limitations
 
-* Scroll Viewport does have a bug with multiple parallel uploads 
-  (https://k15t.jira.com/browse/VPRT-719). Please make sure to upgrade to Scroll
-  Viewport 2.3.1.  
+* Please make sure to upgrade to Scroll Viewport 2.3.1, the Gulp plugin will
+  not work with any version before that.  
 * When using the ``gulp-watch`` file that are deleted or move locally, will
   not automatically be deleted or moved in Confluence. In order to reset a theme
-  use ``viewport.resetTheme`` to remove all files and then upload all files
-  from scratch.
+  use ``viewportTheme.removeAllResources()`` to remove all files and then 
+  upload all files from scratch.
 
 
 ## Resources & Further Reading
