@@ -15,14 +15,22 @@ var gulp = require('gulp');
 var gulpLess = require('gulp-less');
 var minifyCss = require('gulp-minify-css');
 var gulpSourcemaps = require('gulp-sourcemaps');
-var viewport = require('gulp-viewport');
+var ViewportTheme = require('gulp-viewport');
 
 
 // The target system needs to match with a section in .viewportrc
 var TARGET = 'DEV';
 
-// The default upload opts (all sources are assumed to be in a sub-folder 'assets').
-var UPLOAD_OPTS = { sourceBase: 'assets' };
+// The theme name as named in the viewport config
+var THEME_NAME = 'k15t-doc-theme';
+
+// The Viewport URL (for auto reload)
+var VIEWPORT_URL = 'http://localhost:1990/confluence/vsn';
+
+//
+var viewportTheme = new ViewportTheme(THEME_NAME, TARGET, {
+    sourceBase: 'assets'
+});
 
 
 gulp.task('upload', ['fonts', 'img', 'js', 'less', 'templates']);
@@ -32,10 +40,10 @@ gulp.task('watch', function () {
     browserSync.init({
         open: false,
         //https: true,
-        proxy: viewport.getViewportUrl(TARGET)
+        proxy: VIEWPORT_URL
     });
 
-    UPLOAD_OPTS = extend(UPLOAD_OPTS, {
+    viewportTheme.extendUploadOpts({
         uploadOnlyUpdated: 'true',
         success: browserSync.reload
     });
@@ -50,21 +58,21 @@ gulp.task('watch', function () {
 
 gulp.task('fonts', function () {
     return gulp.src('assets/fonts/**/*.*')
-        .pipe(viewport.upload(TARGET, UPLOAD_OPTS))
+        .pipe(viewportTheme.upload())
         .pipe(gulp.dest('build/fonts'));
 });
 
 
 gulp.task('img', function () {
     return gulp.src('assets/img/**/*')
-        .pipe(viewport.upload(TARGET, UPLOAD_OPTS))
+        .pipe(viewportTheme.upload())
         .pipe(gulp.dest('build/img'));
 });
 
 
 gulp.task('js', function () {
     return gulp.src('assets/js/**/*.*')
-        .pipe(viewport.upload(TARGET, UPLOAD_OPTS))
+        .pipe(viewportTheme.upload())
         .pipe(gulp.dest('build/js'));
 });
 
@@ -74,20 +82,20 @@ gulp.task('less', function () {
         .pipe(gulpSourcemaps.init())
         .pipe(gulpLess())
         .pipe(minifyCss())
-        .pipe(viewport.upload(TARGET, extend(clone(UPLOAD_OPTS), {
+        .pipe(viewportTheme.upload({
             targetPath: 'css/main.css'
-        })))
+        }))
         .pipe(gulp.dest('build/css'));
 });
 
 
 gulp.task('templates', function () {
     return gulp.src('assets/**/*.vm')
-        .pipe(viewport.upload(TARGET, UPLOAD_OPTS))
+        .pipe(viewportTheme.upload())
         .pipe(gulp.dest('build'));
 });
 
 
 gulp.task('reset-theme', function () {
-    viewport.removeAllResources(TARGET);
+    viewportTheme.removeAllResources();
 });
