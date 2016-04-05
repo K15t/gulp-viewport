@@ -25,9 +25,9 @@ var TARGET = 'DEV';
 var THEME_NAME = 'k15t-doc-theme';
 
 // The Viewport URL (for auto reload)
-var VIEWPORT_URL = 'http://localhost:1990/confluence/vsn';
+var VIEWPORT_URL = 'http://localhost:1990/confluence/path-prefix';
 
-//
+
 var viewportTheme = new ViewportTheme(THEME_NAME, TARGET, {
     sourceBase: 'assets'
 });
@@ -44,7 +44,6 @@ gulp.task('watch', function () {
     });
 
     viewportTheme.extendUploadOpts({
-        uploadOnlyUpdated: 'true',
         success: browserSync.reload
     });
 
