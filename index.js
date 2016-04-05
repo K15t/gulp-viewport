@@ -20,7 +20,7 @@ const UPDATE_REST_URL = '/rest/scroll-viewport/1.0/theme/{0}/resource';
 const DELETE_REST_URL = '/rest/scroll-viewport/1.0/theme/{0}/resource';
 
 const LOG_ENABLED = true;
-const DEBUG_ENABLED = false;
+const DEBUG_ENABLED = true;
 
 
 var ViewportTheme = function (themeName, targetSystemKey, uploadOpts) {
@@ -36,7 +36,7 @@ var ViewportTheme = function (themeName, targetSystemKey, uploadOpts) {
     log();
 
     function getTargetConfig(targetSystemKey) {
-        if (!VIEWPORTRC.hasOwnProperty(target)) {
+        if (!VIEWPORTRC.hasOwnProperty(targetSystemKey)) {
             throw new gutil.PluginError(PLUGIN_NAME, 'No configuration for target \'' + targetSystemKey + '\' found - check ~/.viewportrc.');
         } else {
             return VIEWPORTRC[targetSystemKey];
@@ -86,19 +86,7 @@ function uploadPipeline(uploadOpts) {
             return cb(null, file);
         }
 
-        var isOriginalUpdated = function (file) {
-            return (file.stat.atime.getTime() === file.stat.mtime.getTime())
-        };
-
-        var hasHistory = function (file) {
-            return (file.history.length > 1);
-        };
-
-        if (!uploadOpts.uploadOnlyUpdated || isOriginalUpdated(file) || hasHistory(file)) {
-            uploadFile(file, that, uploadOpts);
-        } else {
-            debug('NOT uploading ' + file.history[0]);
-        }
+        uploadFile(file, that, uploadOpts);
 
         cb(null, file);
     });
