@@ -38,8 +38,6 @@ gulp.task('upload', ['fonts', 'img', 'js', 'less', 'templates']);
 
 gulp.task('watch', function () {
     browserSync.init({
-        open: false,
-        //https: true,
         proxy: VIEWPORT_URL
     });
 
