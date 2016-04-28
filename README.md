@@ -45,7 +45,7 @@ Here is how to do it.
             .pipe(gulpSourcemaps.init())
             .pipe(gulpLess())
             .pipe(minifyCss())
-            .pipe(viewportTheme.upload(TARGET, {
+            .pipe(viewportTheme.upload({
                 targetPath: 'css/main.css'    // target destination of batched file    
             }));
     });
