@@ -136,6 +136,8 @@ function extendUploadOpts(newUploadOpts) {
 
 function removeAllResources(uploadOpts) {
 
+    var that = this;
+
     // if we get upload opts here, clone existing and override
     uploadOpts = uploadOpts ?
         extend(clone(that.uploadOpts), uploadOpts) :
