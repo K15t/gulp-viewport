@@ -106,8 +106,12 @@ To set up gulp-watch and BrowserSync:
 
 ### Example gulpfile.js
 
-Checkout ``example/gulpfile.js`` for a full example gulpfiles.
+Checkout ``example/gulpfile.js`` for a full example gulpfile. This example assumes theme source is found in a
+src/ subdirectory. To start from an existing theme, download the theme jar and unpack into src/, e.g.:
 
+cd example
+mkdir src/
+unzip -d src/ /tmp/scroll-webhelp-theme-2.4.3.jar
 
 ## Known Limitations
 

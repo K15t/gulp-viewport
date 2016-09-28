@@ -29,7 +29,7 @@ var VIEWPORT_URL = 'http://localhost:1990/confluence/path-prefix';
 
 
 var viewportTheme = new ViewportTheme(THEME_NAME, TARGET, {
-    sourceBase: 'assets'
+    sourceBase: 'src'
 });
 
 
@@ -45,37 +45,37 @@ gulp.task('watch', function () {
         success: browserSync.reload
     });
 
-    gulp.watch('assets/fonts/**/*', ['fonts']);
-    gulp.watch('assets/img/**/*', ['img']);
-    gulp.watch('assets/js/**/*', ['js']);
-    gulp.watch('assets/less/**.less', ['less']);
-    gulp.watch('assets/**/*.vm', ['templates']);
+    gulp.watch('src/assets/fonts/**/*', ['fonts']);
+    gulp.watch('src/assets/img/**/*', ['img']);
+    gulp.watch('src/assets/js/**/*', ['js']);
+    gulp.watch('src/assets/less/**.less', ['less']);
+    gulp.watch('src/**/*.vm', ['templates']);
 });
 
 
 gulp.task('fonts', function () {
-    return gulp.src('assets/fonts/**/*.*')
+    return gulp.src('src/assets/fonts/**/*.*')
         .pipe(viewportTheme.upload())
         .pipe(gulp.dest('build/fonts'));
 });
 
 
 gulp.task('img', function () {
-    return gulp.src('assets/img/**/*')
+    return gulp.src('src/assets/img/**/*')
         .pipe(viewportTheme.upload())
         .pipe(gulp.dest('build/img'));
 });
 
 
 gulp.task('js', function () {
-    return gulp.src('assets/js/**/*.*')
+    return gulp.src('src/assets/js/**/*.*')
         .pipe(viewportTheme.upload())
         .pipe(gulp.dest('build/js'));
 });
 
 
 gulp.task('less', function () {
-    return gulp.src('assets/less/main.less')
+    return gulp.src('src/assets/less/main.less')
         .pipe(gulpSourcemaps.init())
         .pipe(gulpLess())
         .pipe(minifyCss())
@@ -86,14 +86,14 @@ gulp.task('less', function () {
 });
 
 gulp.task('css', function () {
-    return gulp.src('assets/css/**/*.css')
+    return gulp.src('src/assets/css/**/*.css')
         .pipe(viewportTheme.upload())
         .pipe(gulp.dest('build/css'));
 });
 
 
 gulp.task('templates', function () {
-    return gulp.src('assets/**/*.vm')
+    return gulp.src('src/**/*.vm')
         .pipe(viewportTheme.upload())
         .pipe(gulp.dest('build'));
 });
