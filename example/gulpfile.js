@@ -48,6 +48,7 @@ gulp.task('watch', function () {
     gulp.watch('src/assets/fonts/**/*', ['fonts']);
     gulp.watch('src/assets/img/**/*', ['img']);
     gulp.watch('src/assets/js/**/*', ['js']);
+    gulp.watch('src/assets/css/**.css', ['css']);
     gulp.watch('src/assets/less/**.less', ['less']);
     gulp.watch('src/**/*.vm', ['templates']);
 });
