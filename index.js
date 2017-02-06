@@ -102,6 +102,9 @@ function uploadFile(file, viewportTheme, uploadOpts) {
         targetPath = uploadOpts.targetPath;
     }
 
+    // paths are correctly joined, but the server requires slashes for the path.
+    targetPath = targetPath.replace(/\\/g, '/')
+
     debug('Uploading \'' + file.history[0] + '\' to \'' + targetPath + '\'.');
 
     file.pipe(request({
