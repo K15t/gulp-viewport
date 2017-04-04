@@ -124,7 +124,7 @@ function uploadFile(file, viewportTheme, uploadOpts) {
 
         } else {
             uploadOpts.error && uploadOpts.error(file, response);
-            log('Error while uploading file to \'' + targetSystem.confluenceBaseUrl + '\':\n' +
+            log('Error while uploading file '+file.history[0].replace(file.cwd, '')+' to \'' + viewportTheme.targetSystem.confluenceBaseUrl + '\':\n' +
                 response.statusCode + ' - ' + response.statusMessage);
         }
     }));
