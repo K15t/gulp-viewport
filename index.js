@@ -61,7 +61,7 @@ var ViewportTheme = function (themeName, targetSystemKey, uploadOpts) {
 };
 
 
-function uploadPipeline(uploadOpts) {
+function upload(uploadOpts) {
 
     var that = this;
 
@@ -86,24 +86,21 @@ function uploadPipeline(uploadOpts) {
             return cb(null, file);
         }
 
-        uploadFile(file, that, uploadOpts);
+        uploadFile(file, that, uploadOpts, cb);
 
-        cb(null, file);
+        // cb(null, file);
     });
 
 }
 
 
-function uploadFile(file, viewportTheme, uploadOpts) {
+function uploadFile(file, viewportTheme, uploadOpts, cb) {
     if (!uploadOpts.targetPath) {
         var targetPath = path.relative(path.join(file.cwd, uploadOpts.sourceBase), file.history[file.history.length - 1]);
         targetPath = path.normalize(targetPath);
     } else {
         targetPath = uploadOpts.targetPath;
     }
-
-    // paths are correctly joined, but the server requires slashes for the path.
-    targetPath = targetPath.replace(/\\/g, '/')
 
     debug('Uploading \'' + file.history[0] + '\' to \'' + targetPath + '\'.');
 
@@ -124,9 +121,10 @@ function uploadFile(file, viewportTheme, uploadOpts) {
 
         } else {
             uploadOpts.error && uploadOpts.error(file, response);
-            log('Error while uploading file '+file.history[0].replace(file.cwd, '')+' to \'' + viewportTheme.targetSystem.confluenceBaseUrl + '\':\n' +
+            log('Error while uploading file to \'' + targetSystem.confluenceBaseUrl + '\':\n' +
                 response.statusCode + ' - ' + response.statusMessage);
         }
+        cb(null, file)
     }));
 
 }
@@ -197,7 +195,7 @@ function debug(msg, obj) {
 }
 
 
-ViewportTheme.prototype.upload = uploadPipeline;
+ViewportTheme.prototype.upload = upload;
 ViewportTheme.prototype.extendUploadOpts = extendUploadOpts;
 ViewportTheme.prototype.removeAllResources = removeAllResources;
 
