@@ -36,19 +36,17 @@ var ViewportTheme = function (themeName, targetSystemKey, uploadOpts) {
     log();
 
     function getTargetConfig(targetSystemKey) {
-        if (!VIEWPORTRC.hasOwnProperty(targetSystemKey)) {
-            if (process.env.hasOwnProperty('USER')
+        if (process.env.hasOwnProperty('USER')
             && process.env.hasOwnProperty('PASS')
             && process.env.hasOwnProperty('URL')) {
-                var config = {
-                    confluenceBaseUrl : process.env.URL,
-                    username : process.env.USER,
-                    password : process.env.PASS
-                }
-                return config
-            } else {
-                throw new gutil.PluginError(PLUGIN_NAME, 'No configuration for target \'' + targetSystemKey + '\' found - check ~/.viewportrc.');
-            }
+            var config = {
+                confluenceBaseUrl : process.env.URL,
+                username : process.env.USER,
+                password : process.env.PASS
+            };
+            return config;
+        } else if (!VIEWPORTRC.hasOwnProperty(targetSystemKey)) {
+            throw new gutil.PluginError(PLUGIN_NAME, 'No configuration for target \'' + targetSystemKey + '\' found - check ~/.viewportrc.');
         } else {
             return VIEWPORTRC[targetSystemKey];
         }
