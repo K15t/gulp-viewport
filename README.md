@@ -2,8 +2,8 @@
 
 The Gulp plugin for Scroll Viewport uploads theme resources directly into Scroll Viewport.
 
-This is useful, when developing a Scroll Viewport theme in a local IDE. In this case, a Gulp 
-file can watch the resources, automatically upload the resources to Scroll Viewport, and 
+This is useful, when developing a Scroll Viewport theme in a local IDE. In this case, a Gulp
+file can watch the resources, automatically upload the resources to Scroll Viewport, and
 even have for example BrowserSync to sync the browser.
 
 ## Get started
@@ -15,19 +15,30 @@ to upload theme.
     confluenceBaseUrl=http://localhost:1990/confluence
     username=admin
     password=admin
-    
+
 Each section in the file is represents a Confluence server, also called "target system". 
 In the example above there is one target system called "DEV".                                                                    
 
 Then you can use the Gulp Viewport plugin in your gulp file like the following:
 
     var viewportTheme = new ViewportTheme('the-theme-name', 'DEV');
- 
- 
+
+### Using process.env
+
+If you do not want to rely on a `.viewportrc` sitting in your home, or need automated builds on a CI server, you can use the following `process.env` variables:
+
+* USER: Username
+* PASS: Password
+* URL: The Confluence base URL
+
+
+    USER=youruser PASS=yourpass URL=https://your-confluence-installation.com gulp upload
+
+
 ### Upload all files in pipeline
 
-The gulp-viewport plugin provides a special destination, that uploads a files in the 
-pipeline to a target (that has been defined in the ``~/.viewportrc`` file). 
+The gulp-viewport plugin provides a special destination, that uploads a files in the
+pipeline to a target (that has been defined in the ``~/.viewportrc`` file).
 
     gulp.task('templates', function () {
         return gulp.src('assets/**/*.vm')
@@ -57,29 +68,29 @@ For development gulp-watch and BrowserSync is super handy.
 
 To set up gulp-watch and BrowserSync:
 
-    // Dependencies 
+    // Dependencies
     var browserSync = require('browser-sync').create();
     [...]
     var ViewportTheme = require('gulp-viewport');
 
     // The target system needs to match with a section in .viewportrc
     var TARGET = 'DEV';
-    
+
     var viewportTheme = new ViewportTheme('the-theme-name', TARGET, { sourceBase: 'assets' });
-    
+
     gulp.task('watch', function () {
-    
+
         // init browser sync.
         browserSync.init({
             open: false,
             proxy: 'http://localhost:1990/confluence/vsn',   // the target needs to define a viewportUrl
         });
-    
+
         // Override the UPLOAD_OPTS to enable auto reload.
         viewportTheme.extendUploadOpts({
             success: browserSync.reload
         });
-    
+
         gulp.watch('assets/less/**.less', ['less']);
         gulp.watch('assets/**/*.vm', ['templates']);
         // ... create more watches for other file types here
@@ -92,7 +103,7 @@ To set up gulp-watch and BrowserSync:
         viewportTheme.removeAllResources();
     });
 
-    
+
 ### Example gulpfile.js
 
 Checkout ``example/gulpfile.js`` for a full example gulpfiles.
@@ -104,7 +115,7 @@ Checkout ``example/gulpfile.js`` for a full example gulpfiles.
   not work with any version before that.  
 * When using the ``gulp-watch`` file that are deleted or move locally, will
   not automatically be deleted or moved in Confluence. In order to reset a theme
-  use ``viewportTheme.removeAllResources()`` to remove all files and then 
+  use ``viewportTheme.removeAllResources()`` to remove all files and then
   upload all files from scratch.
 
 
