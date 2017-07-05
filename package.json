@@ -3,11 +3,11 @@
   "version": "1.2.1",
   "description": "The Gulp plugin for Scroll Viewport uploads theme resources directly into Scroll Viewport.",
   "dependencies": {
-    "clone": "^1.0.2",
     "extend": "^3.0.0",
-    "home-config": "^0.1.0",
     "gulp-util": "^3.0.6",
+    "home-config": "^0.1.0",
     "request": "^2.60.0",
+    "riot-observable": "^3.0.0",
     "strformat": "0.0.7",
     "sync-request": "^3.0.0",
     "through2": "^2.0.0"
