@@ -1,4 +1,5 @@
 "use strict"
+
 var fs = require('fs')
 var gutil = require('gulp-util')
 var homeConfig = require('home-config')
@@ -18,7 +19,6 @@ const DELETE_REST_URL = '/rest/scroll-viewport/1.0/theme/{0}/resource'
 
 module.exports = class ViewportTheme {
     constructor(options) {
-
 
         // allow events to be triggered and listened to
         observable(this)
