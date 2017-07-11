@@ -45,10 +45,8 @@ module.exports = class ViewportTheme {
             targetPath: process.env.VPRT_TARGETPATH,
         }
 
-        options = Object.assign({}, defaultOptions, options)
-        options.target = Object.assign({}, defaultOptions.target, options.target)
-
-        this.options = this.validateOptions(options)
+        this.options = defaultOptions
+        this.extendOptions(options)
 
         this.log(`${this.getUserAnnotation()} Changing theme ${gutil.colors.bold.red(this.options.themeName)} at ${gutil.colors.bold.green(this.options.target.confluenceBaseUrl)}`)
 
@@ -60,6 +58,14 @@ module.exports = class ViewportTheme {
             return `[${gutil.colors.red.bold(this.options.target.username)}@${this.options.env}]`
         } else if (this.options.target.confluenceBaseUrl) {
             return `[${gutil.colors.red.bold(this.options.target.username)}]`
+        }
+    }
+
+    extendOptions(options) {
+        if (options) {
+            Object.assign(this.options, options)
+            Object.assign(this.options.target, options.target)
+            this.options = this.validateOptions(this.options)
         }
     }
 
