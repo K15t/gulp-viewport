@@ -85,6 +85,8 @@ gulp.task('templates', function () {
 });
 ```
 
+`viewportTheme.upload()` accepts options that can override the initial ones. This is useful for setting `sourceBase` and `targetPath` on demand.
+
 ### Upload preprocessed files
 
 Especially CSS and JS files usually need some batching, minification and other pre-processing.
