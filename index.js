@@ -117,7 +117,8 @@ module.exports = class ViewportTheme {
         console.error(message)
     }
 
-    upload() {
+    upload(options) {
+        this.extendOptions(options)
         this.trigger('upload')
         return through.obj(
             (file, enc, cb) => {
