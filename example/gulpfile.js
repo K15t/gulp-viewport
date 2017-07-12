@@ -28,7 +28,9 @@ var THEME_NAME = 'k15t-doc-theme';
 var VIEWPORT_URL = 'http://localhost:1990/confluence/path-prefix';
 
 
-var viewportTheme = new ViewportTheme(THEME_NAME, TARGET, {
+var viewportTheme = new ViewportTheme({
+    env: TARGET,
+    themeName: THEME_NAME,
     sourceBase: 'src'
 });
 
@@ -41,9 +43,7 @@ gulp.task('watch', function () {
         proxy: VIEWPORT_URL
     });
 
-    viewportTheme.extendUploadOpts({
-        success: browserSync.reload
-    });
+    viewportTheme.on('uploaded', browserSync.reload);
 
     gulp.watch('src/assets/fonts/**/*', ['fonts']);
     gulp.watch('src/assets/img/**/*', ['img']);
