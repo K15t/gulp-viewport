@@ -46,7 +46,7 @@ module.exports = class ViewportTheme {
         }
 
         this.options = defaultOptions
-        this.extendOptions(options)
+        this.options = this.extendOptions(options)
 
         this.log(`${this.getUserAnnotation()} Changing theme ${gutil.colors.bold.red(this.options.themeName)} at ${gutil.colors.bold.green(this.options.target.confluenceBaseUrl)}`)
 
@@ -62,10 +62,13 @@ module.exports = class ViewportTheme {
     }
 
     extendOptions(options) {
+        var newOptions = {target:{}}
         if (options) {
-            Object.assign(this.options, options)
-            Object.assign(this.options.target, options.target)
-            this.options = this.validateOptions(this.options)
+            Object.assign(newOptions, this.options, options)
+            if (options.target) {
+                Object.assign(newOptions.target, this.options.target, options.target)
+            }
+            return this.validateOptions(newOptions)
         }
     }
 
@@ -77,7 +80,7 @@ module.exports = class ViewportTheme {
             if (!options.themeName) {
                 throw new gutil.PluginError(PLUGIN_NAME, 'themeName or themeId missing')
             } else {
-                options.themeId = this.getThemeId(options.themeName)
+                options.themeId = this.getThemeId(options)
             }
         }
         if (!options.targetPath) {
@@ -89,17 +92,18 @@ module.exports = class ViewportTheme {
         return options
     }
 
-    getThemeId(themeName) {
-        var response = syncRequest('GET', strformat(this.options.target.confluenceBaseUrl + THEME_BY_NAME_REST_URL, themeName),
+    getThemeId(options) {
+        console.log(options.target);
+        var response = syncRequest('GET', strformat(options.target.confluenceBaseUrl + THEME_BY_NAME_REST_URL, options.themeName),
             {
                 headers: {
-                    'Authorization': ('Basic ' + new Buffer(this.options.target.username + ':' + this.options.target.password).toString('base64'))
+                    'Authorization': ('Basic ' + new Buffer(options.target.username + ':' + options.target.password).toString('base64'))
                 }
             }
         )
 
         if (response.statusCode != 200) {
-            throw new gutil.PluginError(PLUGIN_NAME, 'Theme \'' + themeName + '\' not found on \'' + this.options.target.confluenceBaseUrl +
+            throw new gutil.PluginError(PLUGIN_NAME, 'Theme \'' + options.themeName + '\' not found on \'' + options.target.confluenceBaseUrl +
                 '\'! Create a new theme named exactly like this to fix.')
         }
 
@@ -119,7 +123,7 @@ module.exports = class ViewportTheme {
     }
 
     upload(options) {
-        this.extendOptions(options)
+        options = this.extendOptions(options)
         this.trigger('upload')
         return through.obj(
             (file, enc, cb) => {
