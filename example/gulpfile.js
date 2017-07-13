@@ -86,13 +86,6 @@ gulp.task('less', function () {
         .pipe(gulp.dest('build/css'));
 });
 
-gulp.task('css', function () {
-    return gulp.src('src/assets/css/**/*.css')
-        .pipe(viewportTheme.upload())
-        .pipe(gulp.dest('build/css'));
-});
-
-
 gulp.task('templates', function () {
     return gulp.src('src/**/*.vm')
         .pipe(viewportTheme.upload())
