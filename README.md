@@ -4,6 +4,7 @@
 
 <!-- toc orderedList:0 depthFrom:2 depthTo:6 -->
 
+* [Install](#install)
 * [Get started](#get-started)
     * [Upload all files in a pipeline](#upload-all-files-in-a-pipeline)
     * [Upload preprocessed files](#upload-preprocessed-files)
@@ -22,6 +23,13 @@ The Gulp plugin for Scroll Viewport uploads theme resources directly into Scroll
 This is useful, when developing a Scroll Viewport theme in a local IDE. In this case, a Gulp file can watch the resources, automatically upload the resources to Scroll Viewport, and even have for example BrowserSync to sync the browser.
 
 Looking for the old version documentation? [See readme for 1.2.0](https://github.com/K15t/gulp-viewport/blob/ba1c5bb0ff4d3b938ecca37e017c21bb833867a3/README.md).
+
+## Install
+
+Install gulp-viewport as dev devepency
+```
+npm i -D gulp gulp-viewport
+```
 
 ## Get started
 
@@ -85,7 +93,7 @@ gulp.task('templates', function () {
 });
 ```
 
-`viewportTheme.upload()` accepts options that can override the initial ones. This is useful for setting `sourceBase` and `targetPath` on demand.
+`viewportTheme.upload()` accepts options that can temporarily override the options for the upload. This is useful for setting `sourceBase` and `targetPath` on demand. **Note:** the options are reset to the initial ones, after each upload.
 
 ### Upload preprocessed files
 
@@ -150,7 +158,12 @@ gulp.task('reset-theme', function () {
 
 ### Example gulpfile.js
 
-Checkout [example/gulpfile.js](example/gulpfile.js) for a full example gulpfiles.
+Checkout [example/gulpfile.js](example/gulpfile.js) for a full example gulpfile.
+To use the example, you need to install the following dependencies:
+
+```
+npm i -S browser-sync clone extend gulp-less gulp-minify-css gulp-sourcemaps
+```
 
 ## Using gulp without a .viewportrc for CI server
 
