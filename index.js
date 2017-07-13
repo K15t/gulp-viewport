@@ -49,8 +49,6 @@ module.exports = class ViewportTheme {
         this.options = this.extendOptions(options)
 
         this.log(`${this.getUserAnnotation()} Changing theme ${gutil.colors.bold.red(this.options.themeName)} at ${gutil.colors.bold.green(this.options.target.confluenceBaseUrl)}`)
-
-        this.files = []
     }
 
     getUserAnnotation() {
@@ -125,12 +123,13 @@ module.exports = class ViewportTheme {
     upload(options) {
         options = this.extendOptions(options)
         this.trigger('upload')
+        let filesToUpload = []
         return through.obj(
             (file, enc, cb) => {
                 // If file exists, add it to our queue
                 if (!file.isNull()) {
                     let relativePath = path.relative(this.options.targetPath, file.history[0])
-                    this.files.push(
+                    filesToUpload.push(
                         {
                             path: path.relative(this.options.sourceBase, file.history[0]),
                             file: fs.createReadStream(relativePath)
@@ -140,8 +139,8 @@ module.exports = class ViewportTheme {
                 cb(null, file)
             },
             (cb) => {
-                let files = this.files.map(item=>item.file)
-                let locations = this.files.map(item=>item.path)
+                let files = filesToUpload.map(item=>item.file)
+                let locations = filesToUpload.map(item=>item.path)
                 request({
                     url: strformat(this.options.target.confluenceBaseUrl + UPDATE_REST_URL, this.options.themeId),
                     method: 'POST',
