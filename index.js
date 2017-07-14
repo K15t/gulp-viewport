@@ -128,10 +128,10 @@ module.exports = class ViewportTheme {
             (file, enc, cb) => {
                 // If file exists, add it to our queue
                 if (!file.isNull()) {
-                    let relativePath = path.relative(this.options.targetPath, file.history[0])
+                    let relativePath = path.relative(options.targetPath, file.history[0])
                     filesToUpload.push(
                         {
-                            path: path.relative(this.options.sourceBase, file.history[0]),
+                            path: path.relative(options.sourceBase, file.history[0]),
                             file: fs.createReadStream(relativePath)
                         }
                     )
@@ -142,11 +142,11 @@ module.exports = class ViewportTheme {
                 let files = filesToUpload.map(item=>item.file)
                 let locations = filesToUpload.map(item=>item.path)
                 request({
-                    url: strformat(this.options.target.confluenceBaseUrl + UPDATE_REST_URL, this.options.themeId),
+                    url: strformat(options.target.confluenceBaseUrl + UPDATE_REST_URL, options.themeId),
                     method: 'POST',
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                        'Authorization': ('Basic ' + new Buffer(this.options.target.username + ':' + this.options.target.password).toString('base64'))
+                        'Authorization': ('Basic ' + new Buffer(options.target.username + ':' + options.target.password).toString('base64'))
                     },
                     formData: { files, locations }
                 }, (error, response) => {
