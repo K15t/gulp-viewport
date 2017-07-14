@@ -59,7 +59,7 @@ module.exports = class ViewportTheme {
         }
     }
 
-    extendOptions(options) {
+    extendOptions(options = {}) {
         var newOptions = {target:{}}
         if (options) {
             Object.assign(newOptions, this.options, options)
