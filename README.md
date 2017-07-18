@@ -63,6 +63,8 @@ Below is the full list of configuration options:
 var viewportTheme = new ViewportTheme({
     // name of the theme to upload to
     themeName: 'your-theme-name',
+    // If you want to use space admin permissions instead of global, set the space key here
+    scope: ,
     // For home-config users of .viewportrc - defines which config to use for target
     env: 'DEV',
     // If you want to set up your target via the gulpfile instead of a .viewportrc, use this.
@@ -171,6 +173,7 @@ For tools like Bitbucket pipelines, where you can't rely on a file `.viewportrc`
 
 * VPRT_THEMENAME - `themeName`
 * VPRT_THEMEID - `themeId`
+* VPRT_SCOPE - `scope`
 * VPRT_ENV - `env`
 * VPRT_CONFLUENCEBASEURL - `target.confluenceBaseUrl`
 * VPRT_USERNAME - `target.username`

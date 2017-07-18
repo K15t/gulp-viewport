@@ -13,7 +13,7 @@ var observable = require("riot-observable")
 const PLUGIN_NAME = 'gulp-viewport'
 const VIEWPORTRC = homeConfig.load('.viewportrc')
 
-const THEME_BY_NAME_REST_URL = '/rest/scroll-viewport/1.0/theme?name={0}'
+const THEME_BY_NAME_REST_URL = '/rest/scroll-viewport/1.0/theme?name={0}&scope={1}'
 const UPDATE_REST_URL = '/rest/scroll-viewport/1.0/theme/{0}/resource'
 const DELETE_REST_URL = '/rest/scroll-viewport/1.0/theme/{0}/resource'
 
@@ -31,6 +31,8 @@ module.exports = class ViewportTheme {
             themeId: process.env.VPRT_THEMEID,
             // For home-config users of .viewportrc - defines which config to use for target
             env: process.env.VPRT_ENV,
+            // If you want to use space admin permissions instead of global, set the space key here
+            scope: process.env.VPRT_SCOPE,
             // If you do not want to use a .viewportrc file, you can manually pass the target opts
             target: {
                 // https://your-installation.com/confluence/
@@ -92,7 +94,7 @@ module.exports = class ViewportTheme {
 
     getThemeId(options) {
         console.log(options.target);
-        var response = syncRequest('GET', strformat(options.target.confluenceBaseUrl + THEME_BY_NAME_REST_URL, options.themeName),
+        var response = syncRequest('GET', strformat(options.target.confluenceBaseUrl + THEME_BY_NAME_REST_URL, options.themeName, options.scope),
             {
                 headers: {
                     'Authorization': ('Basic ' + new Buffer(options.target.username + ':' + options.target.password).toString('base64'))
