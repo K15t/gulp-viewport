@@ -101,8 +101,14 @@ module.exports = class ViewportTheme {
         )
 
         if (response.statusCode != 200) {
+            console.log(response.statusCode + ' - ' + response.statusMessage)
+            if (response.statusCode == 401) {
+                throw new gutil.PluginError('Authentication for '+options.target.username+' failed!')
+            } else {
+
             throw new gutil.PluginError(PLUGIN_NAME, 'Theme \'' + options.themeName + '\' not found on \'' + options.target.confluenceBaseUrl +
                 '\'! Create a new theme named exactly like this to fix.')
+            }
         }
 
         return JSON.parse(response.getBody('utf8')).id
