@@ -104,7 +104,7 @@ module.exports = class ViewportTheme {
 
         if (response.statusCode != 200) {
             console.log(response.statusCode + ' - ' + response.statusMessage)
-            if (response.statusCode == 401) {
+            if (response.statusCode == 401 || response.statusCode == 403) {
                 throw new gutil.PluginError('Authentication for '+options.target.username+' failed!')
             } else {
 
