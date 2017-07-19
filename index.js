@@ -76,13 +76,6 @@ module.exports = class ViewportTheme {
         if (options.env && VIEWPORTRC.hasOwnProperty(options.env)) {
             options.target = Object.assign({}, options.target, VIEWPORTRC[options.env])
         }
-        if (!options.themeId) {
-            if (!options.themeName) {
-                throw new gutil.PluginError(PLUGIN_NAME, 'themeName or themeId missing')
-            } else {
-                options.themeId = this.getThemeId(options)
-            }
-        }
         if (!options.targetPath) {
             options.targetPath = './'
         }
@@ -92,11 +85,17 @@ module.exports = class ViewportTheme {
         if (!options.scope) {
             options.scope = ''
         }
+        if (!options.themeId) {
+            if (!options.themeName) {
+                throw new gutil.PluginError(PLUGIN_NAME, 'themeName or themeId missing')
+            } else {
+                options.themeId = this.getThemeId(options)
+            }
+        }
         return options
     }
 
     getThemeId(options) {
-        console.log(options.target);
         var response = syncRequest('GET', strformat(options.target.confluenceBaseUrl + THEME_BY_NAME_REST_URL, options.themeName, options.scope),
             {
                 headers: {
