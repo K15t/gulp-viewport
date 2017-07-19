@@ -89,6 +89,9 @@ module.exports = class ViewportTheme {
         if (!options.sourceBase) {
             options.sourceBase = './'
         }
+        if (!options.scope) {
+            options.scope = ''
+        }
         return options
     }
 
