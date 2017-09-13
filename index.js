@@ -138,11 +138,28 @@ module.exports = class ViewportTheme {
             (file, enc, cb) => {
                 // If file exists, add it to our queue
                 if (!file.isNull()) {
-                    let relativePath = path.relative(options.targetPath, file.history[0])
+                    let sourceBase = path.relative(options.sourceBase, file.history[0])
+                    let relativeSourceFilePath = path.relative(process.cwd(), file.history[0])
+                    let sourceBasedFilePath = path.relative(options.sourceBase, relativeSourceFilePath)
+                    let targetPathFilePath = path.relative(options.targetPath, sourceBasedFilePath)
+                    let targetPathStart = path.relative(process.cwd(), options.targetPath)
+
+                    if (options.targetPath.match(/\.\w+?$/)) {
+                        var targetPath = targetPathStart
+                    } else {
+                        var targetPath = targetPathFilePath
+                    }
+
+                    if (options.sourceBase.match(/\.\w+?$/)) {
+                        var sourceBasePath = options.sourceBase
+                    } else {
+                        var sourceBasePath = relativeSourceFilePath
+                    }
+
                     filesToUpload.push(
                         {
-                            path: path.relative(options.sourceBase, file.history[0]),
-                            file: fs.createReadStream(relativePath)
+                            path: targetPath,
+                            file: fs.createReadStream(sourceBasePath)
                         }
                     )
                 }
@@ -160,6 +177,10 @@ module.exports = class ViewportTheme {
                     },
                     formData: { files, locations }
                 }, (error, response) => {
+                    if (error) {
+                        console.log(error);
+                        return
+                    }
                     if (response.statusCode === 201) {
                         let uploadedFiles = JSON.parse(response.body)
                         uploadedFiles.map(item=>this.log(item))
