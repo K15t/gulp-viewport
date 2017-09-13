@@ -1,4 +1,5 @@
-// Example gulpfile.js:
+// Example gulpfile.js
+// install all dependencies first (run npm install)
 //
 // Configuration:
 //   TARGET -- the target to deploy to
@@ -22,10 +23,10 @@ var ViewportTheme = require('gulp-viewport');
 var TARGET = 'DEV';
 
 // The theme name as named in the viewport config
-var THEME_NAME = 'k15t-doc-theme';
+var THEME_NAME = 'gulp-css';
 
-// The Viewport URL (for auto reload)
-var VIEWPORT_URL = 'http://localhost:1990/confluence/path-prefix';
+// The url to your viewport, if you use browsersync
+var BROWSERSYNC_URL = 'http://localhost:8090';
 
 
 var viewportTheme = new ViewportTheme({
@@ -35,12 +36,12 @@ var viewportTheme = new ViewportTheme({
 });
 
 
-gulp.task('upload', ['fonts', 'img', 'js', 'less', 'templates']);
+gulp.task('upload', ['fonts', 'img', 'js', 'css', 'less', 'templates']);
 
 
 gulp.task('watch', function () {
     browserSync.init({
-        proxy: VIEWPORT_URL
+        proxy: BROWSERSYNC_URL
     });
 
     viewportTheme.on('uploaded', browserSync.reload);
@@ -80,10 +81,14 @@ gulp.task('less', function () {
         .pipe(gulpSourcemaps.init())
         .pipe(gulpLess())
         .pipe(minifyCss())
-        .pipe(viewportTheme.upload({
-            targetPath: 'css/main.css'
-        }))
-        .pipe(gulp.dest('build/css'));
+        .pipe(gulp.dest('build/css'))
+        .pipe(viewportTheme.upload({sourceBase: 'build/css/main.css', targetPath: 'assets/css/main.css'}))
+});
+
+gulp.task('css', function () {
+    return gulp.src('src/assets/css/**/*.css')
+        .pipe(minifyCss())
+        .pipe(viewportTheme.upload());
 });
 
 gulp.task('templates', function () {
