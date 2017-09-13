@@ -84,6 +84,50 @@ var viewportTheme = new ViewportTheme({
 });
 ```
 
+### sourceBase & targetPath
+
+These two settings are special, as they give you control over where the source comes from, and where it belongs to.
+
+**Example with single file**
+We want to preprocess `src/less/main.less` and upload it to `css/main.css`
+The setting would have to be the following:
+```js
+gulp.task('less', function () {
+    return gulp.src('src/less/main.less')
+        .pipe(gulpSourcemaps.init())
+        .pipe(gulpLess())
+        .pipe(minifyCss())
+        .pipe(gulp.dest('build/css'))
+        .pipe(viewportTheme.upload(
+            {
+                sourceBase: 'build/css/main.css',
+                targetPath: 'css/main.css'
+            }
+        ))
+});
+```
+
+In this case, we change paths, so we have to set a new sourceBase.
+If we just want different folders, but keep the extension and filename, you will use it like this:
+
+**Example with multiple files**
+Templates are in `src/main_theme/templates` and we want to upload to `/`
+
+```js
+gulp.task('less', function () {
+    return gulp.src('src/main_theme/templates/**/*.vm')
+        .pipe(viewportTheme.upload(
+            {
+                sourceBase: 'src/main_theme/templates',
+            }
+        ))
+});
+```
+
+This rebases the path for all uploaded files to `/`. In this case, all uploaded files have `src/main_theme/templates` removed.
+
+So with these two options, you can remove or extend the path.
+
 ### Upload all files in a pipeline
 
 The gulp-viewport plugin provides a special destination, that uploads a files in the pipeline to a target (that has been defined in the `~/.viewportrc` file).
