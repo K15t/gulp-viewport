@@ -48,7 +48,7 @@ var viewportTheme = new ViewportTheme({
 });
 
 
-gulp.task('upload', ['fonts', 'img', 'js', 'css', 'less', 'templates']);
+gulp.task('upload', ['reset-theme', 'fonts', 'img', 'js', 'css', 'less', 'templates']);
 
 
 gulp.task('watch', function () {
