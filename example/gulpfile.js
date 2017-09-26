@@ -28,7 +28,7 @@ var ViewportTheme = require('gulp-viewport');
 var THEME_NAME = 'webhelp-theme';
 
 // The url to your viewport, if you use browsersync.
-// A tool to automatically refresh the browser when watching files
+// A tool to automatically refresh the browser when watching files. See https://www.browsersync.io/
 // var BROWSERSYNC_URL = 'http://localhost:8090';
 
 
