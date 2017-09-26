@@ -33,7 +33,18 @@ npm i -D gulp gulp-viewport
 
 ## Get started
 
-Create a config file `~/.viewportrc` that contains a list of all systems to which you want to upload theme.
+If you want to just get started with a working example, clone the repository and head to the [example](example).
+
+```sh
+git clone git@github.com:K15t/gulp-viewport.git
+cd gulp-viewport/example
+npm install
+// change settings to match your username, password, confluence url and theme name
+gulp upload
+```
+
+For further professional usage, please continue with the instructions below.
+Create a config file in your home directory called `.viewportrc`. This contains a list of all systems to which you want to upload your themes.
 
 ```yaml
 [DEV]
@@ -211,7 +222,7 @@ To use the example, you need to install the following dependencies:
 npm i -S browser-sync clone extend gulp-less gulp-minify-css gulp-sourcemaps
 ```
 
-## Using gulp without a .viewportrc for CI server
+## Using gulp without a .viewportrc for a CI server
 
 For tools like Bitbucket pipelines, where you can't rely on a file `.viewportrc` sitting in your home, or need automated builds on a CI server, you can use the following `process.env` variables:
 
@@ -231,17 +242,19 @@ Same with the config for the gulpfile: you can omit `env` if you use `user`, `pa
 VPRT_THEMENAME=my-theme VPRT_USERNAME=user VPRT_PASSWORD=secret VPRT_CONFLUENCEBASEURL=https://your-confluence-installation.com gulp upload
 ```
 
-Checkout ``example/gulpfile.js`` for a full example gulpfile. This example assumes theme source is found in a
+Checkout [example/gulpfile.js](example/gulpfile.js) for a full example gulpfile. This example assumes theme source is found in a
 src/ subdirectory. To start from an existing theme, download the theme jar and unpack into src/, e.g.:
 
+```sh
 cd example
 mkdir src/
 unzip -d src/ /tmp/scroll-webhelp-theme-2.4.3.jar
+```
 
 ## Known Limitations
 
-* Please make sure to upgrade to Scroll Viewport 2.7.1, the Gulp plugin will not work with any version before that. If you look to support an older version, make sure to install 1.2.0 of the plugin ([See readme 1.2.0]((https://github.com/K15t/gulp-viewport/blob/ba1c5bb0ff4d3b938ecca37e017c21bb833867a3/README.md))).
-* When using the `gulp-watch` files that are deleted or moved locally, will not automatically be deleted or moved in Confluence. In order to reset a theme use `viewportTheme.removeAllResources()` to remove all files and then upload all files from scratch.
+* Please make sure you have Scroll Viewport 2.7.1 or later installed, the Gulp plugin will not work with any version before that. If you look to support an older version, please install version 1.2.0 of the plugin ([See readme 1.2.0]((https://github.com/K15t/gulp-viewport/blob/ba1c5bb0ff4d3b938ecca37e017c21bb833867a3/README.md))).
+* When using `gulp-watch`, files that are deleted or moved locally, will not automatically be deleted or moved in Confluence. In order to reset a theme use `viewportTheme.removeAllResources()` to remove all files and then upload all files from scratch.
 
 
 ## Resources & Further Reading

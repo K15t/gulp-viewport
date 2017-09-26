@@ -9,7 +9,7 @@
 //   reset-theme -- remove all files from theme
 //   watch -- watch (to be used during development)
 
-var browserSync = require('browser-sync').create();
+// var browserSync = require('browser-sync').create();
 var clone = require('clone');
 var extend = require('extend');
 var gulp = require('gulp');
@@ -20,18 +20,30 @@ var ViewportTheme = require('gulp-viewport');
 
 
 // The target system needs to match with a section in .viewportrc
-var TARGET = 'DEV';
+// We recommend to use a .viewportrc move password and username credentials away from this file
+// You should never check in your credentials to your codebase.
+// var TARGET = 'DEV';
 
-// The theme name as named in the viewport config
-var THEME_NAME = 'gulp-css';
+// Create a theme in your Viewport with the exact same name.
+var THEME_NAME = 'webhelp-theme';
 
-// The url to your viewport, if you use browsersync
-var BROWSERSYNC_URL = 'http://localhost:8090';
+// The url to your viewport, if you use browsersync.
+// A tool to automatically refresh the browser when watching files
+// var BROWSERSYNC_URL = 'http://localhost:8090';
 
 
 var viewportTheme = new ViewportTheme({
-    env: TARGET,
+    //env: TARGET,
     themeName: THEME_NAME,
+    target : {
+        // PLEASE NOTE!
+        // We highly recommend to use the env: TARGET setting
+        // You can however use username and password here directly to start quickly.
+        // How to use env is explained here: https://github.com/K15t/gulp-viewport#get-started
+        confluenceBaseUrl: 'localhost:8090',
+        username: 'admin',
+        password: 'admin'
+    }
     sourceBase: 'src'
 });
 
@@ -40,9 +52,9 @@ gulp.task('upload', ['fonts', 'img', 'js', 'css', 'less', 'templates']);
 
 
 gulp.task('watch', function () {
-    browserSync.init({
-        proxy: BROWSERSYNC_URL
-    });
+    // browserSync.init({
+    //     proxy: BROWSERSYNC_URL
+    // });
 
     viewportTheme.on('uploaded', browserSync.reload);
 
