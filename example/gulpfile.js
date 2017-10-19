@@ -20,33 +20,22 @@ var ViewportTheme = require('gulp-viewport');
 
 
 // The target system needs to match with a section in .viewportrc
-// We recommend to use a .viewportrc move password and username credentials away from this file
-// You should never check in your credentials to your codebase.
-// var TARGET = 'DEV';
+// How to use the different environments within the .viewportrc file is explained here: https://github.com/K15t/gulp-viewport#get-started
+var TARGET = 'DEV';
 
-// Create a theme in your Viewport with the exact same name.
-var THEME_NAME = 'webhelp-theme';
+// !! Create Theme in Viewport !!
+// Before you can upload your theme there must be a Viewport theme with the exact same name like this THEME_NAME
+var THEME_NAME = 'your-theme';
 
 // The url to your viewport, if you use browsersync.
 // A tool to automatically refresh the browser when watching files. See https://www.browsersync.io/
 // var BROWSERSYNC_URL = 'http://localhost:8090';
 
-
 var viewportTheme = new ViewportTheme({
-    //env: TARGET,
+    env: TARGET,
     themeName: THEME_NAME,
-    target : {
-        // PLEASE NOTE!
-        // We highly recommend to use the env: TARGET setting
-        // You can however use username and password here directly to start quickly.
-        // How to use env is explained here: https://github.com/K15t/gulp-viewport#get-started
-        confluenceBaseUrl: 'localhost:8090',
-        username: 'admin',
-        password: 'admin'
-    }
     sourceBase: 'src'
 });
-
 
 gulp.task('upload', ['reset-theme', 'fonts', 'img', 'js', 'css', 'less', 'templates']);
 
