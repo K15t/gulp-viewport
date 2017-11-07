@@ -87,7 +87,12 @@ module.exports = class ViewportTheme {
         }
         if (!options.themeId) {
             if (!options.themeName) {
-                throw new gutil.PluginError(PLUGIN_NAME, 'themeName or themeId missing')
+                if (!options.target.themeName) {
+                    throw new gutil.PluginError(PLUGIN_NAME, 'themeName or themeId missing')
+                } else {
+                    options.themeName = options.target.themeName
+                    options.themeId = this.getThemeId(options)
+                }
             } else {
                 options.themeId = this.getThemeId(options)
             }
