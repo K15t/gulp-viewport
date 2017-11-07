@@ -83,7 +83,11 @@ module.exports = class ViewportTheme {
             options.sourceBase = './'
         }
         if (!options.scope) {
-            options.scope = ''
+            if (!options.target.scope) {
+                options.scope = ''
+            } else {
+                options.scope = options.target.scope
+            }
         }
         if (!options.themeId) {
             if (!options.themeName) {
