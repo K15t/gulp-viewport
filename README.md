@@ -95,6 +95,51 @@ var viewportTheme = new ViewportTheme({
 });
 ```
 
+### Targeting multiple themes and spaces
+
+You may be deploying the theme to a test development and a production instance on the same server, or you may use different spaces to test changes. You can also include themeName and scope in the `.viewportrc` file to further specify the target system:
+
+```yaml
+[DEV]
+confluenceBaseUrl=http://localhost:1990/confluence
+themeName=Twenty-Sixteen-Dev
+scope=VPRTDOCDEV
+username=admin
+password=admin
+
+[PROD]
+confluenceBaseUrl=http://localhost:1990/confluence
+themeName=Twenty-Sixteen 
+scope=VPRTDOC
+username=admin
+password=admin
+
+```
+
+In the example above there are two target systems called **DEV** and **PROD**. Then you can use the Gulp Viewport plugin in your gulp file along with a command line parameter:
+
+```js
+var ViewportTheme = require('gulp-viewport');
+var minimist = require('minimist');
+
+var knownOptions = {
+  string: 'env',
+  default: { env: process.env.VPRT_ENV || 'DEV' }
+};
+
+var options = minimist(process.argv.slice(2), knownOptions);
+
+var viewportTheme = new ViewportTheme({
+    env: options.env
+});
+```
+
+Then you can pass the parameter on the gulp command line to specify the target system, or omit it to fallback to an environment variable or the default value:
+
+```
+gulp --env PROD
+```
+
 ### sourceBase & targetPath
 
 These two settings are special, as they give you control over where the source comes from, and where it belongs to.
