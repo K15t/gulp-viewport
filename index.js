@@ -116,7 +116,7 @@ module.exports = class ViewportTheme {
         if (response.statusCode != 200) {
             console.log(response.statusCode + ' - ' + response.statusMessage)
             if (response.statusCode == 401 || response.statusCode == 403) {
-                throw new gutil.PluginError('Authentication for '+options.target.username+' failed!')
+                throw new gutil.PluginError(PLUGIN_NAME, 'Authentication for '+options.target.username+' failed!')
             } else {
 
             throw new gutil.PluginError(PLUGIN_NAME, 'Theme \'' + options.themeName + '\' not found on \'' + options.target.confluenceBaseUrl +
