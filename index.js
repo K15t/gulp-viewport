@@ -83,11 +83,20 @@ module.exports = class ViewportTheme {
             options.sourceBase = './'
         }
         if (!options.scope) {
-            options.scope = ''
+            if (!options.target.scope) {
+                options.scope = ''
+            } else {
+                options.scope = options.target.scope
+            }
         }
         if (!options.themeId) {
             if (!options.themeName) {
-                throw new gutil.PluginError(PLUGIN_NAME, 'themeName or themeId missing')
+                if (!options.target.themeName) {
+                    throw new gutil.PluginError(PLUGIN_NAME, 'themeName or themeId missing')
+                } else {
+                    options.themeName = options.target.themeName
+                    options.themeId = this.getThemeId(options)
+                }
             } else {
                 options.themeId = this.getThemeId(options)
             }
@@ -107,7 +116,7 @@ module.exports = class ViewportTheme {
         if (response.statusCode != 200) {
             console.log(response.statusCode + ' - ' + response.statusMessage)
             if (response.statusCode == 401 || response.statusCode == 403) {
-                throw new gutil.PluginError('Authentication for '+options.target.username+' failed!')
+                throw new gutil.PluginError(PLUGIN_NAME, 'Authentication for '+options.target.username+' failed!')
             } else {
 
             throw new gutil.PluginError(PLUGIN_NAME, 'Theme \'' + options.themeName + '\' not found on \'' + options.target.confluenceBaseUrl +
