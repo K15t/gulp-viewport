@@ -302,7 +302,8 @@ unzip -d src/ /tmp/scroll-webhelp-theme-2.4.3.jar
 If you want to open you theme in the theme editor in confluence and get an error "Loading failed: Could not load theme" and you work with OS Windows please follow these steps.
 
 * install this plugin https://www.npmjs.com/package/slash
-* try uploading your theme again
+* surround the calls to path.relative inside the index.js file with slash()
+* try uploading your theme again.
 
 Cause:
 when running the plugin on a Windows machine, the path plugin used to create relative path-names generates backslashes in the path instead of the expected slashes (see [https://nodejs.org/docs/latest/api/path.html]).
