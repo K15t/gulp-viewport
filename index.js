@@ -9,6 +9,7 @@ var syncRequest = require('sync-request')
 var strformat = require('strformat')
 var through = require("through2")
 var observable = require("riot-observable")
+var slash = require("slash")
 
 const PLUGIN_NAME = 'gulp-viewport'
 const VIEWPORTRC = homeConfig.load('.viewportrc')
@@ -147,11 +148,11 @@ module.exports = class ViewportTheme {
             (file, enc, cb) => {
                 // If file exists, add it to our queue
                 if (!file.isNull()) {
-                    let sourceBase = path.relative(options.sourceBase, file.history[0])
-                    let relativeSourceFilePath = path.relative(process.cwd(), file.history[0])
-                    let sourceBasedFilePath = path.relative(options.sourceBase, relativeSourceFilePath)
-                    let targetPathFilePath = path.relative(options.targetPath, sourceBasedFilePath)
-                    let targetPathStart = path.relative(process.cwd(), options.targetPath)
+                    let sourceBase = slash(path.relative(options.sourceBase, file.history[0]))
+                    let relativeSourceFilePath = slash(path.relative(process.cwd(), file.history[0]))
+                    let sourceBasedFilePath = slash(path.relative(options.sourceBase, relativeSourceFilePath))
+                    let targetPathFilePath = slash(path.relative(options.targetPath, sourceBasedFilePath))
+                    let targetPathStart = slash(path.relative(process.cwd(), options.targetPath))
 
                     if (options.targetPath.match(/\.\w+?$/)) {
                         var targetPath = targetPathStart

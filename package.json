@@ -10,7 +10,8 @@
     "riot-observable": "^3.0.0",
     "strformat": "0.0.7",
     "sync-request": "^3.0.0",
-    "through2": "^2.0.0"
+    "through2": "^2.0.0",
+    "slash": "1.0.0"
   },
   "main": "index.js",
   "scripts": {
