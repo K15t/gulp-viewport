@@ -60,6 +60,9 @@ password=admin
 Each section in the file is represents a Confluence server, also called **target system**.
 In the example above there is one target system called **DEV**.
 
+**NOTE:** If any entry contains a semicolon, make sure to escape it like this `\;`. This is necessary because in ini files, semicolons 
+start a comment.
+
 For advanced usage, please refer to the instructions below.
 
 
