@@ -1,10 +1,13 @@
 // Example gulpfile.js
-// install all dependencies first (run npm install)
+// IMPORTANT: Install all dependencies first (run npm install)
 //
 // Configuration:
 //   TARGET -- the target to deploy to
+//   THEME_NAME -- the name of the theme
+//   BROWSERSYNC_URL -- the URL to be proxied by browser sync
 //
 // Tasks:
+//   create -- create theme in Confluence (unless it exists)
 //   upload -- full build & upload
 //   reset-theme -- remove all files from theme
 //   watch -- watch (to be used during development)
@@ -17,17 +20,13 @@ var gulpSourcemaps = require('gulp-sourcemaps');
 var ViewportTheme = require('gulp-viewport');
 
 
-// The target system needs to match with a section in .viewportrc
-// How to use the different environments within the .viewportrc file is explained here: https://github.com/K15t/gulp-viewport#get-started
+// The target environment (as defined in ~/.viewportrc)
 var TARGET = 'DEV';
 
-// !! Create Theme in Viewport !!
-// Before you can upload your theme there must be a Viewport theme with the exact same name like this THEME_NAME
 var THEME_NAME = 'your-theme-name';
 
-// The url to your viewport, if you use browsersync.
-// A tool to automatically refresh the browser when watching files. See https://www.browsersync.io/
 var BROWSERSYNC_URL = 'http://localhost:1990/confluence';
+
 
 var viewportTheme = new ViewportTheme({
     env: TARGET,
