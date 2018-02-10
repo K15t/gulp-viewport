@@ -51,6 +51,9 @@ module.exports = class ViewportTheme {
         this.options = defaultOptions;
         this.options = this.extendOptions(options);
 
+        // let's remove trailing slash, from Confluence base URL, if there is one
+        this.options.target.confluenceBaseUrl = this.options.target.confluenceBaseUrl.replace(/\/$/, '');
+
         this.log(`${this.getUserAnnotation()} Changing theme ${gutil.colors.bold.yellow(this.options.themeName)} at ${gutil.colors.bold.green(this.options.target.confluenceBaseUrl)}`);
     }
 
