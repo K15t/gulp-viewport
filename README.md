@@ -6,19 +6,24 @@
 
 <!-- toc orderedList:0 depthFrom:2 depthTo:6 -->
 
-* [Install](#install)
-* [Get started](#get-started)
-* [Manual setup](#manual-setup)
+* [Quick Start](#quick-start)
+* [Manual Setup](#manual-setup)
+  * [Create ~/.viewportrc](#create-viewportrc)
+  * [Create a theme project with a Gulpfile.js](#create-a-theme-project-with-a-gulpfilejs)
 * [Advanced Usage](#advanced-usage)
-    * [Upload all files in a pipeline](#upload-all-files-in-a-pipeline)
-    * [Upload preprocessed files](#upload-preprocessed-files)
-    * [Set-up BrowserSync](#set-up-browsersync)
-    * [Delete all files from theme](#delete-all-files-from-theme)
-    * [Example gulpfile.js](#example-gulpfilejs)
-* [Using gulp without a .viewportrc for CI server](#using-gulp-without-a-viewportrc-for-ci-server)
+  * [Creating themes in a space (with space-admin-only permissions)](#creating-themes-in-a-space-with-space-admin-only-permissions)
+  * [Targeting different environments](#targeting-different-environments)
+  * [sourceBase &amp; targetPath](#sourcebase--targetpath)
+  * [Upload all files in a pipeline](#upload-all-files-in-a-pipeline)
+  * [Upload preprocessed files](#upload-preprocessed-files)
+  * [Set-up BrowserSync](#set-up-browsersync)
+  * [Delete all files from theme](#delete-all-files-from-theme)
+  * [Example gulpfile.js](#example-gulpfilejs)
+* [Using gulp without a .viewportrc for a CI server](#using-gulp-without-a-viewportrc-for-a-ci-server)
 * [Known Limitations](#known-limitations)
-* [Resources & Further Reading](#resources-further-reading)
+* [Resources &amp; Further Reading](#resources--further-reading)
 * [Licensing](#licensing)
+
 
 <!-- tocstop -->
 
@@ -28,7 +33,7 @@ This is useful, when developing a Scroll Viewport theme in a local IDE. In this 
 upload the build results into Scroll Viewport.
 
 
-## Get started
+## Quick Start
 
 The fastest way to get started with Gulp viewport is to use the Viewport Developer tools (available https://github.com/K15t/viewport-tools)
 and start with a template project:
