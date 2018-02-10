@@ -7,7 +7,7 @@
     <title>My first Scroll Viewport</title>
     <meta name="description" content="Created with Scroll Viewport">
 
-    <link rel="stylesheet" href="${theme.baseUrl}/assets/css/main.css">
+    <link rel="stylesheet" href="${theme.baseUrl}/css/main.css">
 </head>
 
 <body>
@@ -15,6 +15,6 @@
         $page.content
     </div>
 
-<script src="${theme.baseUrl}/assets/js/main.js"></script>
+<script src="${theme.baseUrl}/js/main.js"></script>
 </body>
 </html>

@@ -1,11 +1,15 @@
 # gulp-viewport
 
-[![](https://img.shields.io/npm/v/gulp-viewport.svg)](https://www.npmjs.com/package/gulp-viewport) [![](https://img.shields.io/npm/dt/gulp-viewport.svg)](https://www.npmjs.com/package/gulp-viewport) [![](https://img.shields.io/twitter/follow/k15tsoftware.svg?style=social&label=Follow)](https://twitter.com/k15tsoftware)
+[![](https://img.shields.io/npm/v/gulp-viewport.svg)](https://www.npmjs.com/package/gulp-viewport) 
+[![](https://img.shields.io/npm/dt/gulp-viewport.svg)](https://www.npmjs.com/package/gulp-viewport) 
+[![](https://img.shields.io/twitter/follow/k15tsoftware.svg?style=social&label=Follow)](https://twitter.com/k15tsoftware)
 
 <!-- toc orderedList:0 depthFrom:2 depthTo:6 -->
 
 * [Install](#install)
 * [Get started](#get-started)
+* [Manual setup](#manual-setup)
+* [Advanced Usage](#advanced-usage)
     * [Upload all files in a pipeline](#upload-all-files-in-a-pipeline)
     * [Upload preprocessed files](#upload-preprocessed-files)
     * [Set-up BrowserSync](#set-up-browsersync)
@@ -18,33 +22,28 @@
 
 <!-- tocstop -->
 
-The Gulp plugin for Scroll Viewport uploads theme resources directly into Scroll Viewport.
+The Gulp plugin for Scroll Viewport theme development uploads theme resources directly into Scroll Viewport.
 
-This is useful, when developing a Scroll Viewport theme in a local IDE. In this case, a Gulp file can watch the resources, automatically upload the resources to Scroll Viewport, and even have for example BrowserSync to sync the browser.
+This is useful, when developing a Scroll Viewport theme in a local IDE. In this case, Gulp can watch the resources, and automatically 
+upload the build results into Scroll Viewport.
 
-Looking for the old version documentation? [See readme for 1.2.0](https://github.com/K15t/gulp-viewport/blob/ba1c5bb0ff4d3b938ecca37e017c21bb833867a3/README.md).
-
-## Install
-
-Install gulp-viewport as dev devepency
-```
-npm i -D gulp gulp-viewport
-```
 
 ## Get started
 
-If you want to just get started with a working example, clone the repository and head to the [example](example).
+The fastest way to get started with Gulp viewport is to use the Viewport Developer tools (available https://github.com/K15t/viewport-tools)
+and start with a template project:
 
-```sh
-git clone git@github.com:K15t/gulp-viewport.git
-cd gulp-viewport/example
-npm install
-// change settings to match your username, password, confluence url and theme name
-gulp upload
-```
+1. Install the Viewport Developer Tools: ``$ npm i -g viewport-tools``
+1. Set up the URL and credentials for your Confluence development system: ``viewport init``
+1. Create a new viewport theme project: ``viewport create``  
+Select the 'Example Theme' in the third step.
 
-For further professional usage, please continue with the instructions below.
-Create a config file in your home directory called `.viewportrc`. This contains a list of all systems to which you want to upload your themes.
+
+## Manual Setup
+
+### Create ~/.viewportrc
+
+Create a config file `.viewportrc` in your home directory. This contains a list of all systems to which you want to upload your themes.
 
 ```yaml
 [DEV]
@@ -56,17 +55,47 @@ password=admin
 Each section in the file is represents a Confluence server, also called **target system**.
 In the example above there is one target system called **DEV**.
 
-Then you can use the Gulp Viewport plugin in your gulp file like the following:
+For advanced usage, please refer to the instructions below.
 
-```js
-var ViewportTheme = require('gulp-viewport');
 
-var viewportTheme = new ViewportTheme({
-    themeName: 'your-theme',
-    // target system
-    env: 'DEV'
-});
-```
+### Create a theme project with a Gulpfile.js
+
+1. Install gulp-viewport as dev dependency:
+
+        npm i -D gulp-viewport
+
+1. Require gulp-viewport and create a ViewportTheme.
+
+        var ViewportTheme = require('gulp-viewport');
+        
+        var viewportTheme = new ViewportTheme({
+            themeName: 'your-theme',
+            env: 'DEV' // taken from the ~/.viewportrc
+        });
+
+1. Create the Viewport theme in Confluence (since 2.3.0):
+
+        gulp.task('create', function() {
+            if(!viewportTheme.exists()) {
+                viewportTheme.create();  // will create the theme in Confluence (global admin permissions required!)
+            } else {
+                console.log('Theme with name \'' + viewportTheme.themeName + '\' already exists.');
+            }
+        });
+
+1. Upload your theme project
+
+        gulp.task('upload', function () {
+            return gulp.src('src/**/*')
+                .pipe(viewportTheme.upload(
+                    {
+                        sourceBase: 'src',
+                    }
+                ))
+        });
+
+
+## Advanced Usage
 
 Below is the full list of configuration options:
 
@@ -83,40 +112,60 @@ var viewportTheme = new ViewportTheme({
     // omit env, if you are using target.
     target: {
         // https://your-installation.com/confluence/
-        confluenceBaseUrl: ,
+        confluenceBaseUrl: 'http://localhost:1990/confluence',
         // A user that is eligible to update viewport themes in the given space
-        username: ,
-        password: ,
+        username: 'admin',
+        password: 'admin',
     },
     // If the source is placed in a subfolder (dist/theme/...) use this path
-    sourceBase: ,
+    sourceBase: '',
     // If the source has to be placed somewhere else than /
-    targetPath: ,
+    targetPath: '',
 });
 ```
 
-### Targeting multiple themes and spaces
+### Creating themes in a space (with space-admin-only permissions)
 
-You may be deploying the theme to a test development and a production instance on the same server, or you may use different spaces to test changes. You can also include themeName and scope in the `.viewportrc` file to further specify the target system:
+If you want to create a viewport theme in a specific scope (space), just set the scope on the theme as follows:
+
+```js
+var viewportTheme = new ViewportTheme({
+    themeName: 'your-theme',
+    env: 'DEV',    // taken from the ~/.viewportrc
+    scope: 'TEST'  // space key
+});
+
+gulp.task('create', function() {
+    if(!viewportTheme.exists()) {
+        viewportTheme.create();  // will create a theme in the space with key 'test' (space admin permissions required!)
+    } else {
+        console.log('Theme with name \'' + THEME_NAME + '\' already exists.');
+    }
+});
+```
+
+
+### Targeting different environments
+
+You may be deploying the theme to different environments (such as development or testing). To do so, you can configure different
+environments in `~/.viewportrc` and use that configurations in your `gulpfile.js`.
+
+This is how you can configure different target environments:
 
 ```yaml
 [DEV]
 confluenceBaseUrl=http://localhost:1990/confluence
-themeName=Twenty-Sixteen-Dev
-scope=VPRTDOCDEV
 username=admin
 password=admin
 
-[PROD]
-confluenceBaseUrl=http://localhost:1990/confluence
-themeName=Twenty-Sixteen 
-scope=VPRTDOC
+[TEST]
+confluenceBaseUrl=http://confluence-test.example.com
 username=admin
 password=admin
-
 ```
 
-In the example above there are two target systems called **DEV** and **PROD**. Then you can use the Gulp Viewport plugin in your gulp file along with a command line parameter:
+In the example above there are two target systems called **DEV** and **TEST**. Then you can use the Gulp Viewport plugin in your gulp 
+file along with a command line parameter:
 
 ```js
 var ViewportTheme = require('gulp-viewport');
@@ -130,15 +179,36 @@ var knownOptions = {
 var options = minimist(process.argv.slice(2), knownOptions);
 
 var viewportTheme = new ViewportTheme({
+    themeName: 'theme-name',
     env: options.env
 });
 ```
 
-Then you can pass the parameter on the gulp command line to specify the target system, or omit it to fallback to an environment variable or the default value:
+Then you can pass the parameter on the gulp command line to specify the target system, or omit it to fallback to an environment variable 
+or the default value:
 
 ```
-gulp --env PROD
+gulp --env TEST
 ```
+
+Note: It is even possible to specify a themeName and scope for the environment, if you may want to upload the theme with different
+scopes (global or specific spaces) and/or names:
+
+````
+[DEV]
+confluenceBaseUrl=http://localhost:1990/confluence
+themeName=test-theme
+scope=TEST
+username=admin
+password=admin
+
+[PROD]
+confluenceBaseUrl=http://confluence-test.example.com
+themeName=docs-theme
+scope=DOCS
+username=spaceadmin
+password=password
+````
 
 ### sourceBase & targetPath
 
@@ -298,14 +368,18 @@ unzip -d src/ /tmp/scroll-webhelp-theme-2.4.3.jar
 
 ## Known Limitations
 
-* Please make sure you have Scroll Viewport 2.7.1 or later installed, the Gulp plugin will not work with any version before that. If you look to support an older version, please install version 1.2.0 of the plugin ([See readme 1.2.0]((https://github.com/K15t/gulp-viewport/blob/ba1c5bb0ff4d3b938ecca37e017c21bb833867a3/README.md))).
-* When using `gulp-watch`, files that are deleted or moved locally, will not automatically be deleted or moved in Confluence. In order to reset a theme use `viewportTheme.removeAllResources()` to remove all files and then upload all files from scratch.
+* Please make sure you have Scroll Viewport 2.7.1 or later installed, the Gulp plugin will not work with any version before that. If you 
+look to support an older version, please install version 1.2.0 of the plugin 
+([See readme 1.2.0]((https://github.com/K15t/gulp-viewport/blob/ba1c5bb0ff4d3b938ecca37e017c21bb833867a3/README.md))).
+* If you move or delete files locally, gulp-viewport will not automatically delete or move in your Confluence. In order 
+to reset a theme use `viewportTheme.removeAllResources()` to remove all files and then upload all files from scratch.
 
 
 ## Resources & Further Reading
 
 The following resources have been used when creating the plugin:
 
+* If you have any questions please join our mailing list and ask them there: https://groups.google.com/forum/#!forum/scroll-viewport-dev 
 * A general starter on Gulp plugins: https://github.com/gulpjs/gulp/blob/master/docs/writing-a-plugin/guidelines.md
 * For the API of the file objects used here: https://github.com/wearefractal/vinyl
 

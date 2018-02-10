@@ -1,11 +1,10 @@
 {
-  "name": "example",
+  "name": "example-theme",
   "version": "1.0.0",
   "description": "",
   "license": "ISC",
   "devDependencies": {
-    "clone": "^2.1.1",
-    "extend": "^3.0.1",
+    "browser-sync": "^2.23.6",
     "gulp": "^3.9.1",
     "gulp-less": "^3.3.2",
     "gulp-minify-css": "^1.2.4",

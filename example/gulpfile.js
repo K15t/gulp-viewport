@@ -9,9 +9,7 @@
 //   reset-theme -- remove all files from theme
 //   watch -- watch (to be used during development)
 
-// var browserSync = require('browser-sync').create();
-var clone = require('clone');
-var extend = require('extend');
+var browserSync = require('browser-sync').create();
 var gulp = require('gulp');
 var gulpLess = require('gulp-less');
 var minifyCss = require('gulp-minify-css');
@@ -25,11 +23,11 @@ var TARGET = 'DEV';
 
 // !! Create Theme in Viewport !!
 // Before you can upload your theme there must be a Viewport theme with the exact same name like this THEME_NAME
-var THEME_NAME = 'your-theme';
+var THEME_NAME = 'your-theme-name';
 
 // The url to your viewport, if you use browsersync.
 // A tool to automatically refresh the browser when watching files. See https://www.browsersync.io/
-// var BROWSERSYNC_URL = 'http://localhost:8090';
+var BROWSERSYNC_URL = 'http://localhost:1990/confluence';
 
 var viewportTheme = new ViewportTheme({
     env: TARGET,
@@ -37,27 +35,36 @@ var viewportTheme = new ViewportTheme({
     sourceBase: 'src'
 });
 
-gulp.task('upload', ['reset-theme', 'fonts', 'img', 'js', 'css', 'less', 'templates']);
+
+gulp.task('upload', ['reset-theme', 'fonts', 'img', 'scripts', 'styles', 'templates']);
 
 
-gulp.task('watch', function () {
-    // browserSync.init({
-    //     proxy: BROWSERSYNC_URL
-    // });
+gulp.task('create', function() {
+    if(!viewportTheme.exists()) {
+        viewportTheme.create();
+    } else {
+        console.log('Theme with name \'' + THEME_NAME + '\' already exists.');
+    }
+});
+
+// added upload as dependency to upload everything before we start to watch.
+gulp.task('watch', ['upload'] , function () {
+    browserSync.init({
+        proxy: BROWSERSYNC_URL
+    });
 
     viewportTheme.on('uploaded', browserSync.reload);
 
     gulp.watch('src/assets/fonts/**/*', ['fonts']);
     gulp.watch('src/assets/img/**/*', ['img']);
-    gulp.watch('src/assets/js/**/*', ['js']);
-    gulp.watch('src/assets/css/**.css', ['css']);
-    gulp.watch('src/assets/less/**.less', ['less']);
+    gulp.watch('src/assets/scripts/**/*', ['scripts']);
+    gulp.watch('src/assets/styles/**/*', ['styles']);
     gulp.watch('src/**/*.vm', ['templates']);
 });
 
 
 gulp.task('fonts', function () {
-    return gulp.src('src/assets/fonts/**/*.*')
+    return gulp.src('src/assets/fonts/**/*')
         .pipe(viewportTheme.upload())
         .pipe(gulp.dest('build/fonts'));
 });
@@ -70,26 +77,25 @@ gulp.task('img', function () {
 });
 
 
-gulp.task('js', function () {
-    return gulp.src('src/assets/js/**/*.*')
-        .pipe(viewportTheme.upload())
+gulp.task('scripts', function () {
+    return gulp.src('src/assets/scripts/**/*')
+        .pipe(viewportTheme.upload({
+            sourceBase: 'src/assets'
+        }))
         .pipe(gulp.dest('build/js'));
 });
 
 
-gulp.task('less', function () {
-    return gulp.src('src/assets/less/main.less')
+gulp.task('styles', function () {
+    return gulp.src('src/assets/styles/main.less')
         .pipe(gulpSourcemaps.init())
         .pipe(gulpLess())
         .pipe(minifyCss())
-        .pipe(gulp.dest('build/css'))
-        .pipe(viewportTheme.upload({sourceBase: 'build/css/main.css', targetPath: 'assets/css/main.css'}))
-});
-
-gulp.task('css', function () {
-    return gulp.src('src/assets/css/**/*.css')
-        .pipe(minifyCss())
-        .pipe(viewportTheme.upload());
+        .pipe(gulp.dest('build/styles'))
+        .pipe(viewportTheme.upload({
+            sourceBase: 'build/styles/main.css', 
+            targetPath: 'css/main.css'
+        }));
 });
 
 gulp.task('templates', function () {
