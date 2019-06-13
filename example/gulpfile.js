@@ -24,13 +24,20 @@ var ViewportTheme = require('gulp-viewport');
 // The target environment (as defined in ~/.viewportrc)
 var TARGET = 'DEV';
 
+// The scope (space) of the theme. Specify space key to install
+// the theme into a space (empty string the theme will be global).
+var SCOPE = '';
+
 var THEME_NAME = 'your-theme-name';
 
-var BROWSERSYNC_URL = 'http://localhost:1990/confluence';
+// Enter Viewport URL here to enable browser sync, e.g.
+// https://localhost:1990/confluence/test
+var BROWSERSYNC_URL = '';
 
 
 var viewportTheme = new ViewportTheme({
     env: TARGET,
+    scope: SCOPE,
     themeName: THEME_NAME,
     sourceBase: 'src'
 });
@@ -49,11 +56,12 @@ gulp.task('create', function() {
 
 // added upload as dependency to upload everything before we start to watch.
 gulp.task('watch', ['upload'] , function () {
-    browserSync.init({
-        proxy: BROWSERSYNC_URL
-    });
-
-    viewportTheme.on('uploaded', browserSync.reload);
+    if (BROWSERSYNC_URL !== '') {
+        browserSync.init({
+            proxy: BROWSERSYNC_URL
+        });
+        viewportTheme.on('uploaded', browserSync.reload);
+    }
 
     gulp.watch('src/assets/fonts/**/*', ['fonts']);
     gulp.watch('src/assets/img/**/*', ['img']);

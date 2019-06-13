@@ -33,7 +33,7 @@ This is useful, when developing a Scroll Viewport theme in a local IDE. In this 
 upload the build results into Scroll Viewport.
 
 
-## Quick Start
+## Quick Start (Recommended)
 
 The fastest way to get started with Gulp viewport is to use the Viewport Developer tools (available https://github.com/K15t/viewport-tools)
 and start with a template project:
