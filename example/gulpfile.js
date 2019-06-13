@@ -17,6 +17,7 @@ var gulp = require('gulp');
 var concat = require('gulp-concat');
 var less = require('gulp-less');
 var cleanCss = require('gulp-clean-css');
+var clean = require('gulp-clean');
 var sourcemaps = require('gulp-sourcemaps');
 var ViewportTheme = require('gulp-viewport');
 
@@ -118,4 +119,6 @@ gulp.task('templates', function () {
 
 gulp.task('reset-theme', function () {
     viewportTheme.removeAllResources();
+    return gulp.src('build', {read: false})
+        .pipe(clean());
 });
