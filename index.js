@@ -71,6 +71,8 @@ module.exports = class ViewportTheme {
             Object.assign(newOptions, this.options, options);
             if (options.target) {
                 Object.assign(newOptions.target, this.options.target, options.target);
+            } else {
+                throw new gutil.PluginError(PLUGIN_NAME, 'Cannot find environment \'' + options.env + '\' in \' ~/.viewportrc.');
             }
             return this.validateOptions(newOptions);
         }
