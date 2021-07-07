@@ -69,12 +69,10 @@ module.exports = class ViewportTheme {
         let newOptions = {target:{}};
         if (options) {
             Object.assign(newOptions, this.options, options);
-            if (options.target) {
-                Object.assign(newOptions.target, this.options.target, options.target);
-            } else {
-                throw new gutil.PluginError(PLUGIN_NAME, 'Cannot find environment \'' + options.env + '\' in \' ~/.viewportrc.');
-            }
+
             return this.validateOptions(newOptions);
+        } else {
+            throw new gutil.PluginError(PLUGIN_NAME, 'Cannot find environment \'' + options.env + '\' in \' ~/.viewportrc.');
         }
     }
 
@@ -244,7 +242,8 @@ module.exports = class ViewportTheme {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                        'Authorization': ('Basic ' + new Buffer(options.target.username + ':' + options.target.password).toString('base64'))
+                        'Authorization': ('Basic ' + new Buffer(options.target.username + ':' + options.target.password).toString('base64')),
+                        'X-Atlassian-Token': 'no-check'
                     },
                     formData: { files, locations }
                 }, (error, response) => {
