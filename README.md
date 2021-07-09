@@ -4,6 +4,14 @@
 [![](https://img.shields.io/npm/dt/gulp-viewport.svg)](https://www.npmjs.com/package/gulp-viewport) 
 [![](https://img.shields.io/twitter/follow/k15tsoftware.svg?style=social&label=Follow)](https://twitter.com/k15tsoftware)
 
+## Deprecation Notice
+The gulp-viewport plugin will be deprecated for its new alternative [viewport-uploader](https://github.com/K15t/viewport-uploader). 
+The new plugin uses webpack for bundling which allows to use ES6 style javascript in your custom theme. gulp-viewport won't receive any 
+more updates in the future.
+
+
+***
+
 <!-- toc orderedList:0 depthFrom:2 depthTo:6 -->
 
 * [Quick Start](#quick-start)
