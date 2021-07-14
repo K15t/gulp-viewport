@@ -66,22 +66,22 @@ module.exports = class ViewportTheme {
     }
 
     extendOptions(options = {}) {
-        let newOptions = {target:{}};
-        if (options) {
-            Object.assign(newOptions, this.options, options);
-            if (options.target) {
-                Object.assign(newOptions.target, this.options.target, options.target);
-            } else {
-                throw new gutil.PluginError(PLUGIN_NAME, 'Cannot find environment \'' + options.env + '\' in \' ~/.viewportrc.');
-            }
-            return this.validateOptions(newOptions);
-        }
+        const newOptions = {
+            target: {}
+        };
+
+        Object.assign(newOptions, this.options, options);
+
+        return this.validateOptions(newOptions);
     }
 
     validateOptions(options) {
         if (options.env && VIEWPORTRC.hasOwnProperty(options.env)) {
             options.target = Object.assign({}, options.target, VIEWPORTRC[options.env])
+        } else {
+            throw new gutil.PluginError(PLUGIN_NAME, 'Cannot find environment \'' + options.env + '\' in \' ~/.viewportrc.');
         }
+
         if (!options.targetPath) {
             options.targetPath = './'
         }
@@ -244,7 +244,8 @@ module.exports = class ViewportTheme {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                        'Authorization': ('Basic ' + new Buffer(options.target.username + ':' + options.target.password).toString('base64'))
+                        'Authorization': ('Basic ' + new Buffer(options.target.username + ':' + options.target.password).toString('base64')),
+                        'X-Atlassian-Token': 'no-check'
                     },
                     formData: { files, locations }
                 }, (error, response) => {
