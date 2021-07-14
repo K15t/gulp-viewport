@@ -66,20 +66,22 @@ module.exports = class ViewportTheme {
     }
 
     extendOptions(options = {}) {
-        let newOptions = {target:{}};
-        if (options) {
-            Object.assign(newOptions, this.options, options);
+        const newOptions = {
+            target: {}
+        };
 
-            return this.validateOptions(newOptions);
-        } else {
-            throw new gutil.PluginError(PLUGIN_NAME, 'Cannot find environment \'' + options.env + '\' in \' ~/.viewportrc.');
-        }
+        Object.assign(newOptions, this.options, options);
+
+        return this.validateOptions(newOptions);
     }
 
     validateOptions(options) {
         if (options.env && VIEWPORTRC.hasOwnProperty(options.env)) {
             options.target = Object.assign({}, options.target, VIEWPORTRC[options.env])
+        } else {
+            throw new gutil.PluginError(PLUGIN_NAME, 'Cannot find environment \'' + options.env + '\' in \' ~/.viewportrc.');
         }
+
         if (!options.targetPath) {
             options.targetPath = './'
         }
